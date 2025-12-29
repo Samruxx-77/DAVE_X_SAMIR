@@ -19,7 +19,12 @@ async function connectToWhatsApp() {
   sock.ev.on('creds.update', saveCreds);
 
   sock.ev.on('connection.update', (update) => {
-    const { connection, lastDisconnect } = update;
+    const { connection, lastDisconnect, qr } = update;
+
+if (qr) {
+  console.log('\n📱 SCAN THIS QR CODE:\n');
+  console.log(qr);
+}
 
     if (connection === 'close') {
       const shouldReconnect =
