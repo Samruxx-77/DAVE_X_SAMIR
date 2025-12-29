@@ -30,7 +30,7 @@ async function connectToWhatsApp() {
     // 🔢 Pairing code (HARDCODED NUMBER)
     if (!state.creds.registered) {
         try {
-            const code = await sock.requestPairingCode("916002213823");
+            const code = await sock.requestPairingCode("919531373324");
             console.log("🔢 Pairing Code:", code);
             console.log("📱 WhatsApp → Linked Devices → Link with phone number");
         } catch (err) {
