@@ -3,7 +3,7 @@ const { handleCommands } = require('./commands');
 const pino = require('pino');
 
 async function connectToWhatsApp() {
-    const { state, saveCreds } = await useMultiFileAuthState('auth_info');
+    const { state, saveCreds } = await useMultiFileAuthState('auth_info_v2');
 
     const sock = makeWASocket({
         auth: state,
