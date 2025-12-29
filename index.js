@@ -6,6 +6,7 @@ const {
 
 const pino = require('pino');
 const { handleCommands } = require('./commands');
+const qrcode = require('qrcode-terminal');
 
 async function connectToWhatsApp() {
   const { state, saveCreds } = await useMultiFileAuthState('auth_info');
@@ -13,7 +14,6 @@ async function connectToWhatsApp() {
   const sock = makeWASocket({
     auth: state,
     logger: pino({ level: 'silent' }),
-    printQRInTerminal: true,
     browser: ['DAVE-X', 'Chrome', '1.0.0']
   });
 
@@ -22,10 +22,10 @@ async function connectToWhatsApp() {
   sock.ev.on('connection.update', (update) => {
     const { connection, lastDisconnect, qr } = update;
 
-if (qr) {
-  console.log('\n📱 SCAN THIS QR CODE:\n');
-  console.log(qr);
-}
+    if (qr) {
+      console.log('\n📱 Scan this QR code:\n');
+      qrcode.generate(qr, { small: true });
+    }
 
     if (connection === 'close') {
       const shouldReconnect =
