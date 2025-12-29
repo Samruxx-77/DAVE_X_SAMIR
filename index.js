@@ -13,6 +13,7 @@ async function connectToWhatsApp() {
   const sock = makeWASocket({
     auth: state,
     logger: pino({ level: 'silent' }),
+    printQRInTerminal: true,
     browser: ['DAVE-X', 'Chrome', '1.0.0']
   });
 
