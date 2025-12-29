@@ -11,11 +11,9 @@ async function connectToWhatsApp() {
         browser: ["DAVE-X", "Chrome", "1.0.0"]
     });
 
-    // 🔐 Save session
     sock.ev.on('creds.update', saveCreds);
 
-    // 🔁 Connection updates
-    sock.ev.on('connection.update', async (update) => {
+    sock.ev.on('connection.update', (update) => {
         const { connection, lastDisconnect } = update;
 
         if (connection === 'close') {
@@ -29,20 +27,17 @@ async function connectToWhatsApp() {
         }
     });
 
-    // 🔢 PAIRING CODE (instead of QR)
+    // 🔢 Pairing code (HARDCODED NUMBER)
     if (!state.creds.registered) {
-        const phoneNumber = process.env.PHONE_NUMBER;
-        if (!phoneNumber) {
-            console.log("❌ PHONE_NUMBER not set");
-            process.exit(1);
+        try {
+            const code = await sock.requestPairingCode("916002213823");
+            console.log("🔢 Pairing Code:", code);
+            console.log("📱 WhatsApp → Linked Devices → Link with phone number");
+        } catch (err) {
+            console.error("❌ Failed to get pairing code:", err.message);
         }
-
-        const code = await sock.requestPairingCode(phoneNumber);
-        console.log(`🔢 Pairing Code: ${code}`);
-        console.log("📱 WhatsApp → Linked Devices → Link with phone number");
     }
 
-    // 📩 Message handler
     sock.ev.on('messages.upsert', async (m) => {
         const msg = m.messages[0];
         if (!msg?.message || msg.key.fromMe) return;
